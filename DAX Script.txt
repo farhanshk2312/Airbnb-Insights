@@ -1,0 +1,208 @@
+-------------------------------------
+-- Calculated Table: 'Measures Table'
+-------------------------------------
+TABLE 'Measures Table' = DATATABLE("Measure Category", STRING, {{"Airbnb Metrics"}})
+
+----------------------------
+-- Measure: [Total Listings]
+----------------------------
+MEASURE 'Measures Table'[Total Listings] = COUNT(airbnb_refined[listing_id])
+    , FormatString = "#,0"
+
+-------------------------
+-- Measure: [Total Hosts]
+-------------------------
+MEASURE 'Measures Table'[Total Hosts] = DISTINCTCOUNT(airbnb_refined[host_id])
+    , FormatString = "#,0"
+
+-----------------------
+-- Measure: [Avg Price]
+-----------------------
+MEASURE 'Measures Table'[Avg Price] = AVERAGE('airbnb_refined'[price])
+    , FormatString = "\$#,0.00;(\$#,0.00);\$#,0.00"
+
+-------------------------------
+-- Measure: [Reviewed Listings]
+-------------------------------
+MEASURE 'Measures Table'[Reviewed Listings] = 
+    CALCULATE(
+        COUNTROWS('airbnb_refined'),
+        'airbnb_refined'[has_review] = 1
+    )
+    , FormatString = "0"
+
+--------------------------
+-- Measure: [Active Hosts]
+--------------------------
+MEASURE 'Measures Table'[Active Hosts] = DISTINCTCOUNT('airbnb_refined'[host_id])
+    , FormatString = "#,0"
+
+-----------------------------------
+-- Measure: [Average Review Rating]
+-----------------------------------
+MEASURE 'Measures Table'[Average Review Rating] = 
+    CALCULATE(
+        AVERAGE('airbnb_refined'[review_scores_rating]),
+        'airbnb_refined'[has_review] = 1
+    )
+    , FormatString = "#,0.00"
+
+-----------------------------
+-- Measure: [% of Superhosts]
+-----------------------------
+MEASURE 'Measures Table'[% of Superhosts] = 
+    DIVIDE(
+        COUNTROWS(
+            FILTER(
+                'airbnb_refined',
+                'airbnb_refined'[host_is_superhost] = "True"
+            )
+        ),
+        COUNTROWS('airbnb_refined')
+    )
+    , FormatString = "0.00%;-0.00%;0.00%"
+
+----------------------------------------
+-- Measure: [% of Listings with Reviews]
+----------------------------------------
+MEASURE 'Measures Table'[% of Listings with Reviews] = 
+    DIVIDE(
+        COUNTROWS(
+            FILTER(
+                'airbnb_refined',
+                'airbnb_refined'[has_review]= 1
+            )
+        ),
+        COUNTROWS('airbnb_refined')
+    )
+    , FormatString = "0.00%;-0.00%;0.00%"
+
+-----------------------------------------
+-- Measure: [Average Host Tenure (Years)]
+-----------------------------------------
+MEASURE 'Measures Table'[Average Host Tenure (Years)] = 
+    AVERAGEX (
+        VALUES ( airbnb_refined[host_id] ), 
+        DATEDIFF ( airbnb_refined[host_id], TODAY(), YEAR )
+    )
+
+---------------------------------
+-- Measure: [% Experienced Hosts]
+---------------------------------
+MEASURE 'Measures Table'[% Experienced Hosts] = 
+    VAR TotalHosts =
+        DISTINCTCOUNT ( airbnb_refined[host_id] )
+    VAR VeteranExperienced =
+        CALCULATE (
+            DISTINCTCOUNT ( airbnb_refined[host_id] ),
+            airbnb_refined[Host_Category] IN { "2008-2010 (Veteran)", "2011-2013 (Experienced)" }
+        )
+    RETURN
+    DIVIDE ( VeteranExperienced, TotalHosts, 0 )
+    , FormatString = "0.00%;-0.00%;0.00%"
+
+-----------------------------------
+-- Measure: [% Affordable Listings]
+-----------------------------------
+MEASURE 'Measures Table'[% Affordable Listings] = 
+    VAR TotalListings =
+        COUNTROWS ( airbnb_refined )
+    VAR AffordableListings =
+        CALCULATE (
+            COUNTROWS ( airbnb_refined ),
+            airbnb_refined[price] < 150
+        )
+    RETURN
+    DIVIDE ( AffordableListings, TotalListings, 0 )
+    , FormatString = "0.00%;-0.00%;0.00%"
+
+-------------------------------------------
+-- Measure: [% Listings with Top Amenities]
+-------------------------------------------
+MEASURE 'Measures Table'[% Listings with Top Amenities] = 
+    VAR TotalListings =
+        COUNTROWS('listing_amenities')
+    VAR ListingsWithTopAmenities =
+        CALCULATE(
+            COUNTROWS('listing_amenities'),
+            FILTER(
+                'listing_amenities',
+                CONTAINSSTRING(LOWER('listing_amenities'[amenities]), "Wifi") ||
+                CONTAINSSTRING(LOWER('listing_amenities'[amenities]), "Essentials") ||
+                CONTAINSSTRING(LOWER('listing_amenities'[amenities]), "Long term stays allowed") ||
+                CONTAINSSTRING(LOWER('listing_amenities'[amenities]), "Kitchen") ||
+                CONTAINSSTRING(LOWER('listing_amenities'[amenities]), "TV") ||
+                CONTAINSSTRING(LOWER('listing_amenities'[amenities]), "Hangers") ||
+                CONTAINSSTRING(LOWER('listing_amenities'[amenities]), "Hair dryer") ||
+                CONTAINSSTRING(LOWER('listing_amenities'[amenities]), "Washer") ||
+                CONTAINSSTRING(LOWER('listing_amenities'[amenities]), "Heating") ||
+                CONTAINSSTRING(LOWER('listing_amenities'[amenities]), "Hot water") ||
+                CONTAINSSTRING(LOWER('listing_amenities'[amenities]), "Air conditioning") ||
+                CONTAINSSTRING(LOWER('listing_amenities'[amenities]), "Elevator")
+    
+            )
+        )
+    RETURN
+    DIVIDE(ListingsWithTopAmenities, TotalListings, 0)
+    , FormatString = "0.00%;-0.00%;0.00%"
+
+----------------------
+-- Measure: [Accuracy]
+----------------------
+MEASURE 'Measures Table'[Accuracy] = average(airbnb_refined[review_scores_accuracy])
+
+----------------------
+-- Measure: [Check-in]
+----------------------
+MEASURE 'Measures Table'[Check-in] = average(airbnb_refined[review_scores_checkin])
+
+-------------------------
+-- Measure: [Cleanliness]
+-------------------------
+MEASURE 'Measures Table'[Cleanliness] = Average(airbnb_refined[review_scores_cleanliness])
+
+---------------------------
+-- Measure: [Communication]
+---------------------------
+MEASURE 'Measures Table'[Communication] = average(airbnb_refined[review_scores_communication])
+
+----------------------
+-- Measure: [Location]
+----------------------
+MEASURE 'Measures Table'[Location] = Average(airbnb_refined[review_scores_location])
+
+-------------------
+-- Measure: [Value]
+-------------------
+MEASURE 'Measures Table'[Value] = Average(airbnb_refined[review_scores_value])
+    , FormatString = "#,0.00"
+
+-------------------------------------------
+-- Measure: [Average Composite Value Score]
+-------------------------------------------
+MEASURE 'Measures Table'[Average Composite Value Score] = average(airbnb_refined[Composite Value Score])
+    , FormatString = "0.00"
+
+-------------------------------
+-- Measure: [% Superhost Count]
+-------------------------------
+MEASURE 'Measures Table'[% Superhost Count] = 
+    DIVIDE(
+    CALCULATE(
+        COUNTROWS('airbnb_refined'),
+        airbnb_refined[host_is_superhost] = "True"
+    ),
+     COUNTROWS('airbnb_refined'),0
+    )
+    , FormatString = "0"
+
+--------------------------------------
+-- Measure: [No. of Reviews Over Time]
+--------------------------------------
+MEASURE 'Measures Table'[No. of Reviews Over Time] = Count(Reviews[review_id])
+
+------------------------------------
+-- Measure: [No. of Hosts Over Time]
+------------------------------------
+MEASURE 'Measures Table'[No. of Hosts Over Time] = Count(airbnb_refined[host_since])
+    , FormatString = "#,0"
