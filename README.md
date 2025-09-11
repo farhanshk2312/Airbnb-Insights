@@ -4,7 +4,7 @@ Data Source: https://mavenanalytics.io/data-playground/airbnb-listings-reviews
 
 # Project Overview
 
-This project explores Airbnb listings data to uncover insights into pricing, amenities, host performance, and customer reviews across different regions. The analysis integrates Python for preprocessing and advanced exploration, Power BI for interactive visualizations, and DAX/Power Query for business logic and transformations.
+This project explores Airbnb data for over 250k listings in 10 major cities, including information about hosts, pricing, location, and room type, along with over 5 million historical reviews, to uncover insights into pricing, amenities, host performance, and customer reviews across different regions. The analysis integrates Python for preprocessing and advanced exploration, Power BI for interactive visualizations, and DAX/Power Query for business logic and transformations.
 The final deliverable is an interactive dashboard designed to provide stakeholders with a clear understanding of what drives listing performance and guest satisfaction.
 ________________________________________
 # Objectives
