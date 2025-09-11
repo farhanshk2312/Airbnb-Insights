@@ -21,7 +21,7 @@ ________________________________________
 ________________________________________
 # Data Preparation & Transformation
 
-  Python (Pandas, Geopy, JSON Handling)
+ The process included extensive data cleaning (handling missing values, normalizing review JSONs, structuring amenities, and extracting country details from inconsistent location fields), followed by feature engineering and KPI creation. Key steps:
   
   •	Extracted Listing ID and amenities into a structured dataset.
   
@@ -72,7 +72,7 @@ ________________________________________
   	
   3.	Location Matters: Central city listings had higher prices but lower value scores compared to suburban options.
   	
-  4.	Review Influence: Properties with ≥4.5 ratings attracted more bookings and achieved price premiums.
+  4.	Review Influence: Properties with higher rating scores attracted more bookings and achieved price premiums.
   	
   5.	Capacity Segmentation: Accommodates range directly correlated with pricing tiers — larger groups led to higher listing costs.
   	
