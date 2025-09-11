@@ -1,4 +1,4 @@
-# Airbnb Listings Analytics Dashboard
+# Airbnb Listings Analytics
 
 Data Source: https://mavenanalytics.io/data-playground/airbnb-listings-reviews
 
