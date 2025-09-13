@@ -1,10 +1,10 @@
-# Airbnb Listings Analytics Dashboard
+# Airbnb Listings Analytics
 
 Data Source: https://mavenanalytics.io/data-playground/airbnb-listings-reviews
 
 # Project Overview
 
-This project explores Airbnb listings data to uncover insights into pricing, amenities, host performance, and customer reviews across different regions. The analysis integrates Python for preprocessing and advanced exploration, Power BI for interactive visualizations, and DAX/Power Query for business logic and transformations.
+This project explores Airbnb data for over 250k listings in 10 major cities, including information about hosts, pricing, location, and room type, along with over 5 million historical reviews, to uncover insights into pricing, amenities, host performance, and customer reviews across different regions. The analysis integrates Python for preprocessing and advanced exploration, Power BI for interactive visualizations, and DAX/Power Query for business logic and transformations.
 The final deliverable is an interactive dashboard designed to provide stakeholders with a clear understanding of what drives listing performance and guest satisfaction.
 ________________________________________
 # Objectives
@@ -21,7 +21,7 @@ ________________________________________
 ________________________________________
 # Data Preparation & Transformation
 
-  Python (Pandas, Geopy, JSON Handling)
+ The process included extensive data cleaning (handling missing values, normalizing review JSONs, structuring amenities, and extracting country details from inconsistent location fields), followed by feature engineering and KPI creation. Key steps:
   
   •	Extracted Listing ID and amenities into a structured dataset.
   
@@ -72,7 +72,7 @@ ________________________________________
   	
   3.	Location Matters: Central city listings had higher prices but lower value scores compared to suburban options.
   	
-  4.	Review Influence: Properties with ≥4.5 ratings attracted more bookings and achieved price premiums.
+  4.	Review Influence: Properties with higher rating scores attracted more bookings and achieved price premiums.
   	
   5.	Capacity Segmentation: Accommodates range directly correlated with pricing tiers — larger groups led to higher listing costs.
   	
